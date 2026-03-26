@@ -30,7 +30,7 @@ namespace DibujoAhorcadoComponente
             set
             {
                 errores = value;
-                CambiaError?.Invoke(this, EventArgs.Empty);
+
                 Refresh();
             }
         }
@@ -43,12 +43,17 @@ namespace DibujoAhorcadoComponente
             int altura = this.Height;
             int anchura = this.Width;
             g.DrawLine(lapiz, (float)(anchura * 0.3), (float)(altura * 0.9), (float)(anchura * 0.6), (float)(altura * 0.9));
-
+            bool cambio = false;
 
             if (errores >= 1)
             {
                 g.DrawLine(lapiz, (float)(anchura * 0.45), (float)(altura * 0.9), (float)(anchura * 0.45), (float)(altura * 0.2));
+                if (!cambio)
+                {
+                    OnCambiaError(this, e);
 
+                }
+                cambio = true;
             }
             if (errores >= 2)
             {
@@ -59,14 +64,14 @@ namespace DibujoAhorcadoComponente
             {
 
                 g.DrawLine(lapiz, (float)(anchura * 0.8), (float)(altura * 0.2), (float)(anchura * 0.8), (float)(altura * 0.3));
-                
+
 
             }
             if (errores >= 4)
             {
 
                 g.DrawEllipse(lapiz, (float)(anchura * 0.75), (float)(altura * 0.3), (float)(anchura * 0.1), (float)(altura * 0.1));
-                
+
             }
             if (errores >= 5)
             {
@@ -96,9 +101,9 @@ namespace DibujoAhorcadoComponente
             {
 
                 g.DrawLine(lapiz, (float)(anchura * 0.8), (float)(altura * 0.7), (float)(anchura * 0.7), (float)(altura * 0.8));
-                Ahorcado?.Invoke(this, EventArgs.Empty);
+                OnAhorcado(this, e);
             }
-            
+
             lapiz.Dispose();
 
 
@@ -106,14 +111,26 @@ namespace DibujoAhorcadoComponente
 
 
         }
+
+
         [Category("Mis eventos")]
         [Description("Se produce cuando se cambia el número de errores")]
         public event EventHandler CambiaError;
+        protected virtual void OnCambiaError(object sender, EventArgs e)
+        {
+            CambiaError?.Invoke(this, EventArgs.Empty);
+            MessageBox.Show("Cambió");
+        }
 
         [Category("Mis eventos")]
         [Description("Se produce cuando el número de errores llega a 9 (cuando el jugador pierde :C )")]
         public event EventHandler Ahorcado;
 
+        protected virtual void OnAhorcado(object sender, EventArgs e)
+        {
+            Ahorcado?.Invoke(this, EventArgs.Empty);
+            MessageBox.Show("Perdiste");
+        }
 
 
     }
