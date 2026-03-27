@@ -29,8 +29,12 @@ namespace DibujoAhorcadoComponente
             get { return errores; }
             set
             {
+                if (value == 9)
+                {
+                    OnAhorcado(this, EventArgs.Empty);
+                }
                 errores = value;
-
+                OnCambiaError(this, EventArgs.Empty);
                 Refresh();
             }
         }
@@ -48,12 +52,7 @@ namespace DibujoAhorcadoComponente
             if (errores >= 1)
             {
                 g.DrawLine(lapiz, (float)(anchura * 0.45), (float)(altura * 0.9), (float)(anchura * 0.45), (float)(altura * 0.2));
-                if (!cambio)
-                {
-                    OnCambiaError(this, e);
 
-                }
-                cambio = true;
             }
             if (errores >= 2)
             {
