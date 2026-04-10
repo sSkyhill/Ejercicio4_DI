@@ -17,8 +17,6 @@ namespace DibujoAhorcadoComponente
         public UserControl1()
         {
             InitializeComponent();
-
-
         }
 
         private int errores;
@@ -29,13 +27,17 @@ namespace DibujoAhorcadoComponente
             get { return errores; }
             set
             {
-                if (value == 9)
+                if (value != errores)
                 {
-                    OnAhorcado(this, EventArgs.Empty);
+
+                    errores = value;
+                    if (errores == 9)
+                    {
+                        OnAhorcado(EventArgs.Empty);
+                    }
+                    OnCambiaError(EventArgs.Empty);
+                    Refresh();
                 }
-                errores = value;
-                OnCambiaError(this, EventArgs.Empty);
-                Refresh();
             }
         }
         protected override void OnPaint(PaintEventArgs e)
@@ -98,16 +100,11 @@ namespace DibujoAhorcadoComponente
             }
             if (errores >= 9)
             {
-
                 g.DrawLine(lapiz, (float)(anchura * 0.8), (float)(altura * 0.7), (float)(anchura * 0.7), (float)(altura * 0.8));
-                OnAhorcado(this, e);
+
             }
 
             lapiz.Dispose();
-
-
-
-
 
         }
 
@@ -115,20 +112,20 @@ namespace DibujoAhorcadoComponente
         [Category("Mis eventos")]
         [Description("Se produce cuando se cambia el número de errores")]
         public event EventHandler CambiaError;
-        protected virtual void OnCambiaError(object sender, EventArgs e)
+        protected virtual void OnCambiaError(EventArgs e)
         {
             CambiaError?.Invoke(this, EventArgs.Empty);
-            MessageBox.Show("Cambió");
+            //MessageBox.Show("Cambió");
         }
 
         [Category("Mis eventos")]
         [Description("Se produce cuando el número de errores llega a 9 (cuando el jugador pierde :C )")]
         public event EventHandler Ahorcado;
 
-        protected virtual void OnAhorcado(object sender, EventArgs e)
+        protected virtual void OnAhorcado(EventArgs e)
         {
             Ahorcado?.Invoke(this, EventArgs.Empty);
-            MessageBox.Show("Perdiste");
+            //MessageBox.Show("Perdiste");
         }
 
 
